@@ -71,13 +71,14 @@ const modalEl = document.querySelector('.js-lightbox');
 const overlayElm = document.querySelector('.lightbox__overlay');
 const modalCurrantImg = document.querySelector('.lightbox__image');
 const modalCloseBtn = document.querySelector('button[data-action="close-lightbox"]');
+let currentIndex = 0;
 
-
-const maxlenght = galleryItems.length -1;
+const maxlenght = galleryItems.length;
 // console.log(maxlenght)
 
 
 const markup = createGalleryMarkup(galleryItems);
+
 
 galleryList.insertAdjacentHTML('afterbegin', markup);
 
@@ -108,9 +109,14 @@ galleryList.addEventListener('click', onClickOnImgGallery);
 
 
 function onClickOnImgGallery(evt) {
-   evt.preventDefault();
- 
-  if (!evt.target.classList.contains("gallery__image") ) {
+  evt.preventDefault();
+  
+  console.log(evt.target);
+  
+  
+  
+  
+  if (!evt.target.classList.contains("gallery__image")) {
     
     return;
     
@@ -118,14 +124,70 @@ function onClickOnImgGallery(evt) {
     modalEl.classList.add('is-open');
     modalCurrantImg.src = evt.target.dataset.source;
     modalCurrantImg.alt = evt.target.alt;
-  
-    window.addEventListener('keydown', onPressKeyToDoAction);
+    currentIndex = evt.target.dataset.num;
+    console.log(currentIndex)
+    // window.addEventListener('keydown', onPressKeyToDoAction);
     modalEl.addEventListener('click', onClickClosedModal);
+
+
+    window.addEventListener("keydown", keyHendler)
+
     
   }
- 
+
 }
 
+function keyHendler(evt) {
+  const key = evt.code;
+  console.log(key)
+    switch (key) {
+        case "Escape": onPressKeyToClose();
+            break;
+        case "ArrowRight": onArrowRight();
+            break;
+        case "ArrowLeft": onArrowLeft();
+            break;
+
+    }
+}
+
+
+function onArrowRight() {
+
+const arriveElementes = document.querySelectorAll('.gallery__image');
+
+    if (Number(currentIndex) + 1 > arriveElementes.length - 1) {
+      currentIndex = 0;
+      console.log('Привет')
+    } else {
+        currentIndex++
+    }
+    modalCurrantImg.src = galleryItems[currentIndex].original;
+    modalCurrantImg.alt = galleryItems[currentIndex].description;
+}
+
+
+function onArrowLeft() {
+    if (currentIndex - 1 < 0) {
+        currentIndex = galleryItems.length - 1;
+    } else {
+        currentIndex--
+    }
+    modalCurrantImg.src = galleryItems[currentIndex].original;
+    modalCurrantImg.alt = galleryItems[currentIndex].description;
+}
+
+function onPressKeyToClose() {
+   
+     modalEl.classList.remove('is-open');
+     modalCurrantImg.src = '';
+     modalCurrantImg.alt = '';
+     console.log(modalCurrantImg);
+   
+
+}
+
+  
  function onClickClosedModal(evt) {
    if (evt.target.tagName !== 'IMG') {
    
@@ -137,51 +199,6 @@ function onClickOnImgGallery(evt) {
 }
 
 
-function onPressKeyToDoAction(evt) {
 
-  const isActiveElm = evt.target.querySelector('.gallery__image');
-  const arriveElementes = document.querySelectorAll('.gallery__image');
- 
-  console.log(isActiveElm.dataset.num);
- 
-
-  if (evt.code === 'ArrowLeft') {
-
-    if (isActiveElm.dataset.num == 0) {
-      return;
-    }
-    
-    isActiveElm.dataset.num -= 1;
-    
-    modalCurrantImg.src = arriveElementes[isActiveElm.dataset.num].dataset.source;
-    modalCurrantImg.alt = arriveElementes[isActiveElm.dataset.num].alt;
-     
-    
-    console.log(modalCurrantImg);
-
-  } else if (evt.code === 'ArrowRight') {
-    console.log(isActiveElm.dataset.num);
-
-    if (isActiveElm.dataset.num == maxlenght) {
-        return
-    }
-    
-       isActiveElm.dataset.num++;
-   
-    modalCurrantImg.src = arriveElementes[isActiveElm.dataset.num].dataset.source;
-    modalCurrantImg.alt = arriveElementes[isActiveElm.dataset.num].alt;
-    console.log(modalCurrantImg);
-    
-
-  } if(evt.code === 'Escape') {
-     modalEl.classList.remove('is-open');
-     modalCurrantImg.src = '';
-     modalCurrantImg.alt = '';
-     console.log(modalCurrantImg);
-  } else {
-    return;
-   }
-    
-  }
 
 
