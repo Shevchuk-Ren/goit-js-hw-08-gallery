@@ -111,9 +111,7 @@ galleryList.addEventListener('click', onClickOnImgGallery);
 function onClickOnImgGallery(evt) {
   evt.preventDefault();
   
-  console.log(evt.target);
-  
-  
+  // console.log(evt.target);
   
   
   if (!evt.target.classList.contains("gallery__image")) {
@@ -125,8 +123,8 @@ function onClickOnImgGallery(evt) {
     modalCurrantImg.src = evt.target.dataset.source;
     modalCurrantImg.alt = evt.target.alt;
     currentIndex = evt.target.dataset.num;
-    console.log(currentIndex)
-    // window.addEventListener('keydown', onPressKeyToDoAction);
+    // console.log(currentIndex)
+    
     modalEl.addEventListener('click', onClickClosedModal);
 
 
@@ -139,7 +137,7 @@ function onClickOnImgGallery(evt) {
 
 function keyHendler(evt) {
   const key = evt.code;
-  console.log(key)
+  // console.log(key)
     switch (key) {
         case "Escape": onPressKeyToClose();
             break;
@@ -158,7 +156,7 @@ const arriveElementes = document.querySelectorAll('.gallery__image');
 
     if (Number(currentIndex) + 1 > arriveElementes.length - 1) {
       currentIndex = 0;
-      console.log('Привет')
+      
     } else {
         currentIndex++
     }
